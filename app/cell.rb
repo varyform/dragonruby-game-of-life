@@ -5,7 +5,7 @@ class Cell
     @world = world
     @x = x
     @y = y
-    @live = rand < 0.1
+    @live = rand < 0.4
   end
 
   def dead?

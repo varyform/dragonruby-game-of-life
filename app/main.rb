@@ -3,18 +3,21 @@
 require 'app/cell'
 require 'app/world'
 
-SIZE = 8
+SIZE    = 8
 PADDING = SIZE * 2
+
 BLACK = { r: 0, g: 0, b: 0 }.freeze
-WHITE = { r: 255, g: 255, b: 255 }.freeze
+WHITE = { r: 255, g: 255, b: 255, a: 150 }.freeze
+RED   = { r: 255, g: 20, b: 20 }.freeze
+GREEN = { r: 20, g: 255, b: 20 }.freeze
 
 def tick(args)
   init(args) if args.state.tick_count.zero?
 
-  bg(args)
+  args.outputs.background_color = BLACK
 
-  args.state.world.cells.select(&:live?).each do |cell|
-    args.outputs.solids << { x: cell.x * SIZE + PADDING, y: cell.y * SIZE + PADDING, w: SIZE, h: SIZE }.merge(WHITE)
+  args.outputs.solids << args.state.world.cells.select(&:live?).map do |cell|
+    { x: cell.x * SIZE + PADDING, y: cell.y * SIZE + PADDING, w: SIZE, h: SIZE, **WHITE }
   end
 
   args.outputs.labels << {
@@ -25,11 +28,11 @@ def tick(args)
     size_enum: 0
   }.merge(WHITE)
 
-  args.state.world.next_generation!
+  args.state.world.next_generation! if args.state.tick_count.mod_zero?(2)
 end
 
 def bg(args, color: BLACK)
-  args.outputs.solids << { x: args.grid.left, y: args.grid.bottom, w: args.grid.w, h: args.grid.h }.merge(color)
+  args.outputs.solids << { x: args.grid.left, y: args.grid.bottom, w: args.grid.w, h: args.grid.h, **color }
 end
 
 def init(args)
