@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 class World
-  def initialize(height, width)
-    @cells = []
-    height.times do |x|
-      @cells.push([])
-      width.times do |y|
-        @cells[x].push(Cell.new(self, x, y))
-      end
-    end
+  def initialize(width, height, count: 100)
+    @cells  = []
+    @count  = count
+    @width  = width
+    @height = height
   end
 
   def cells
@@ -19,6 +16,15 @@ class World
     return unless @cells[x]
 
     @cells[x][y]
+  end
+
+  def day1!
+    @count.times do
+      x = rand(@width)
+      y = rand(@height)
+
+      @cells << Cell.new(self, x, y)
+    end
   end
 
   def next_generation!

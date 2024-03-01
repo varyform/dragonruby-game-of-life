@@ -16,7 +16,7 @@ def tick(args)
 
   args.outputs.background_color = BLACK
 
-  args.outputs.solids << args.state.world.cells.select(&:live?).map do |cell|
+  args.outputs.solids << args.state.world.cells.map do |cell|
     { x: cell.x * SIZE + PADDING, y: cell.y * SIZE + PADDING, w: SIZE, h: SIZE, **WHITE }
   end
 
@@ -28,7 +28,7 @@ def tick(args)
     size_enum: 0
   }.merge(WHITE)
 
-  args.state.world.next_generation! if args.state.tick_count.mod_zero?(2)
+  # args.state.world.next_generation! if args.state.tick_count.mod_zero?(2)
 end
 
 def bg(args, color: BLACK)
@@ -37,4 +37,5 @@ end
 
 def init(args)
   args.state.world = World.new((1280 - PADDING * 2).div(SIZE), (720 - PADDING * 2).div(SIZE))
+  args.state.world.day1!
 end
