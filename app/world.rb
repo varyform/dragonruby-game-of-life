@@ -11,8 +11,9 @@ class World
     attr_reader :cells
 
     def initialize(w, h)
-      @storage = Array.new(h) { Array.new(w, 0) }
-      @cells = []
+      @storage    = Array.new(h) { Array.new(w, 0) }
+      @neighbours = Array.new(h) { Array.new(w, 0) }
+      @cells      = []
     end
 
     def [](y, x)
@@ -21,7 +22,21 @@ class World
 
     def []=(y, x, val)
       @storage[y][x] = val
-      @cells << [y, x] if val == 1
+
+      if val == 1
+        @cells << [y, x]
+        update_neighbours(y, x, +1)
+      else
+        update_neighbours(y, x, -1)
+      end
+    end
+
+    def alive_neighbours_at(x, y)
+      @neighbours[y][x]
+    end
+
+    def update_neighbours(y, x, sign)
+      OFFSETS.each { |oy, ox| @neighbours[y + oy][x + ox] += sign }
     end
   end
 
@@ -40,12 +55,8 @@ class World
     Map.new(@width, @height)
   end
 
-  def alive_neighbours_at(x, y)
-    OFFSETS.sum { |offset_y, offset_x| @map[y + offset_y, x + offset_x] }
-  end
-
   def day1!
-    @count.times { @map[rand(@height), rand(@width)] = 1 }
+    @count.times { @map[rand(@height - 2) + 1, rand(@width - 2) + 1] = 1 }
   end
 
   def next_generation!
@@ -53,7 +64,7 @@ class World
 
     1.upto(@height - 2) do |y|
       1.upto(@width - 2) do |x|
-        neighbours = alive_neighbours_at(x, y)
+        neighbours = @map.alive_neighbours_at(x, y)
 
         new_map[y, x] = 1 if @map[y, x] == 1 && (neighbours == 2 || neighbours == 3) || neighbours == 3
       end
