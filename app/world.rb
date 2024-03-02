@@ -41,18 +41,13 @@ class World
 
     1.upto(@height - 2) do |y|
       1.upto(@width - 2) do |x|
-        cell = @map[y][x]
+        alive = @map[y][x] == 1
 
         neighbours = alive_neighbours_at(x, y)
 
-        if cell == 1 && (neighbours < 2 || neighbours > 3)
-          new_map[y][x] = 0 # die
-        elsif cell == 0 && neighbours == 3
-          new_map[y][x] = 1 # born
+        if alive && (neighbours == 2 || neighbours == 3) || neighbours == 3
+          new_map[y][x] = 1
           @cells << [y, x]
-        else # keep as is
-          new_map[y][x] = cell
-          @cells << [y, x] if cell == 1 # only alive
         end
       end
     end
