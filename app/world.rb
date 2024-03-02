@@ -21,10 +21,8 @@ class World
     Array.new(@height) { Array.new(@width, 0) }
   end
 
-  def neighbours_at(x, y)
-    OFFSETS.count do |offset_y, offset_x|
-      @map[y + offset_y][x + offset_x] == 1 if @map[y + offset_y] && @map[y + offset_y][x + offset_x]
-    end
+  def alive_neighbours_at(x, y)
+    OFFSETS.count { |offset_y, offset_x| @map[y + offset_y][x + offset_x] == 1 }
   end
 
   def day1!
@@ -41,11 +39,11 @@ class World
     new_map = empty_map
     @cells = []
 
-    0.upto(@height - 1) do |y|
-      0.upto(@width - 1) do |x|
+    1.upto(@height - 2) do |y|
+      1.upto(@width - 2) do |x|
         cell = @map[y][x]
 
-        neighbours = neighbours_at(x, y)
+        neighbours = alive_neighbours_at(x, y)
 
         if cell == 1 && (neighbours < 2 || neighbours > 3)
           new_map[y][x] = 0 # die
