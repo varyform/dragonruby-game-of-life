@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class World
-  attr_reader :cells
-
   OFFSETS = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1], [0, 1],
@@ -43,7 +41,7 @@ class World
   end
 
   def alive_neighbours_at(x, y)
-    OFFSETS.count { |offset_y, offset_x| @map[y + offset_y, x + offset_x] == 1 }
+    OFFSETS.sum { |offset_y, offset_x| @map[y + offset_y, x + offset_x] }
   end
 
   def day1!
@@ -55,11 +53,9 @@ class World
 
     1.upto(@height - 2) do |y|
       1.upto(@width - 2) do |x|
-        alive = @map[y, x] == 1
-
         neighbours = alive_neighbours_at(x, y)
 
-        new_map[y, x] = 1 if alive && (neighbours == 2 || neighbours == 3) || neighbours == 3
+        new_map[y, x] = 1 if @map[y, x] == 1 && (neighbours == 2 || neighbours == 3) || neighbours == 3
       end
     end
 
