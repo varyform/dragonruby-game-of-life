@@ -9,47 +9,57 @@ class World
     [1, -1], [1, 0], [1, 1]
   ].freeze
 
+  class Map
+    attr_reader :cells
+
+    def initialize(w, h)
+      @storage = Array.new(h) { Array.new(w, 0) }
+      @cells = []
+    end
+
+    def [](y, x)
+      @storage[y][x]
+    end
+
+    def []=(y, x, val)
+      @storage[y][x] = val
+      @cells << [y, x] if val == 1
+    end
+  end
+
   def initialize(width, height, count: (width * height).div(3))
-    @cells   = []
     @count   = count
     @width   = width
     @height  = height
     @map     = empty_map
   end
 
+  def cells
+    @map.cells
+  end
+
   def empty_map
-    Array.new(@height) { Array.new(@width, 0) }
-    # Hash.new { |hsh, key| hsh[key] = {} } # slower
+    Map.new(@width, @height)
   end
 
   def alive_neighbours_at(x, y)
-    OFFSETS.count { |offset_y, offset_x| @map[y + offset_y][x + offset_x] == 1 }
+    OFFSETS.count { |offset_y, offset_x| @map[y + offset_y, x + offset_x] == 1 }
   end
 
   def day1!
-    @count.times do
-      x = rand(@width)
-      y = rand(@height)
-
-      @map[y][x] = 1
-      @cells << [y, x]
-    end
+    @count.times { @map[rand(@height), rand(@width)] = 1 }
   end
 
   def next_generation!
     new_map = empty_map
-    @cells = []
 
     1.upto(@height - 2) do |y|
       1.upto(@width - 2) do |x|
-        alive = @map[y][x] == 1
+        alive = @map[y, x] == 1
 
         neighbours = alive_neighbours_at(x, y)
 
-        if alive && (neighbours == 2 || neighbours == 3) || neighbours == 3
-          new_map[y][x] = 1
-          @cells << [y, x]
-        end
+        new_map[y, x] = 1 if alive && (neighbours == 2 || neighbours == 3) || neighbours == 3
       end
     end
 
