@@ -23,20 +23,16 @@ class World
     def []=(y, x, val)
       @storage[y][x] = val
 
-      if val == 1
-        @cells << [y, x]
-        update_neighbours(y, x, +1)
-      else
-        update_neighbours(y, x, -1)
-      end
+      @cells << [y, x]
+      bump_neighbours(y, x)
     end
 
     def alive_neighbours_at(x, y)
       @neighbours[y][x]
     end
 
-    def update_neighbours(y, x, sign)
-      OFFSETS.each { |oy, ox| @neighbours[y + oy][x + ox] += sign }
+    def bump_neighbours(y, x)
+      OFFSETS.each { |oy, ox| @neighbours[y + oy][x + ox] += 1 }
     end
   end
 
