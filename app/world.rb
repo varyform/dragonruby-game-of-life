@@ -9,7 +9,7 @@ class World
     [1, -1], [1, 0], [1, 1]
   ].freeze
 
-  def initialize(width, height, count: 5000)
+  def initialize(width, height, count: (width * height).div(3))
     @cells   = []
     @count   = count
     @width   = width
@@ -19,6 +19,7 @@ class World
 
   def empty_map
     Array.new(@height) { Array.new(@width, 0) }
+    # Hash.new { |hsh, key| hsh[key] = {} } # slower
   end
 
   def alive_neighbours_at(x, y)
