@@ -2,7 +2,7 @@
 
 require 'app/world'
 
-SIZE    = 8
+SIZE    = 3
 PADDING = SIZE * 2
 
 BLACK = { r: 0, g: 0, b: 0 }.freeze
@@ -15,12 +15,14 @@ def tick(args)
 
   args.outputs.background_color = BLACK
 
-  args.outputs.solids << args.state.world.cells.map do |y, x|
+  cells = args.state.world.cells
+
+  args.outputs.solids << cells.map do |y, x|
     { x: x * SIZE + PADDING, y: y * SIZE + PADDING, w: SIZE - 1, h: SIZE - 1, **WHITE }
   end
 
   args.outputs.labels << {
-    text: "Ticks: #{args.state.tick_count} | FPS: #{args.gtk.current_framerate.round}",
+    text: "Ticks: #{args.state.tick_count} | FPS: #{args.gtk.current_framerate.round} | CELLS: #{cells.size} of #{args.state.world.stats[:born]} (#{args.state.world.stats[:max]})",
     x: 10.from_right,
     y: 10.from_top,
     alignment_enum: 2,

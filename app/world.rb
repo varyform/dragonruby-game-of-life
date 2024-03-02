@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class World
-  OFFSETS = [
-    [-1, -1], [-1, 0], [-1, 1],
-    [0, -1], [0, 1],
-    [1, -1], [1, 0], [1, 1]
-  ].freeze
-
   class Map
+    OFFSETS = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1], [0, 1],
+      [1, -1], [1, 0], [1, 1]
+    ].freeze
+
     attr_reader :cells
 
     def initialize(w, h)
@@ -41,6 +41,10 @@ class World
     @width   = width
     @height  = height
     @map     = empty_map
+  end
+
+  def stats
+    { max: @width * @height, born: @count }
   end
 
   def cells
