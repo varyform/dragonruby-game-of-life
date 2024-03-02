@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class World
+  attr_reader :cells
+
   OFFSETS = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1], [0, 1],
@@ -31,26 +33,13 @@ class World
       y = rand(@height)
 
       @map[y][x] = 1
+      @cells << [y, x]
     end
-  end
-
-  def cells
-    cells = []
-
-    0.upto(@height - 1) do |y|
-      0.upto(@width - 1) do |x|
-        cells << [y, x] if @map[y][x] == 1
-      end
-    end
-
-    cells
   end
 
   def next_generation!
     new_map = empty_map
-
-    dead = 0
-    born = 0
+    @cells = []
 
     0.upto(@height - 1) do |y|
       0.upto(@width - 1) do |x|
@@ -60,12 +49,12 @@ class World
 
         if cell == 1 && (neighbours < 2 || neighbours > 3)
           new_map[y][x] = 0 # die
-          dead += 1
         elsif cell == 0 && neighbours == 3
           new_map[y][x] = 1 # born
-          born += 1
+          @cells << [y, x]
         else # keep as is
           new_map[y][x] = cell
+          @cells << [y, x] if cell == 1 # only alive
         end
       end
     end
