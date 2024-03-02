@@ -16,7 +16,7 @@ def tick(args)
   args.outputs.background_color = BLACK
 
   args.outputs.solids << args.state.world.cells.map do |y, x|
-    { x: x * SIZE + PADDING, y: y * SIZE + PADDING, w: SIZE, h: SIZE, **WHITE }
+    { x: x * SIZE + PADDING, y: y * SIZE + PADDING, w: SIZE - 1, h: SIZE - 1, **WHITE }
   end
 
   args.outputs.labels << {
