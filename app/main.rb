@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'app/cell'
 require 'app/world'
 
 SIZE    = 8

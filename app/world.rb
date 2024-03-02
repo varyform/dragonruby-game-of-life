@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class World
+  OFFSETS = [
+    [-1, -1], [-1, 0], [-1, 1],
+    [0, -1], [0, 1],
+    [1, -1], [1, 0], [1, 1]
+  ].freeze
+
   def initialize(width, height, count: 5000)
     @cells   = []
     @count   = count
@@ -14,17 +20,9 @@ class World
   end
 
   def neighbours_at(x, y)
-    n = []
-
-    -1.upto(1) do |y_|
-      -1.upto(1) do |x_|
-        next if y_.zero? && x_.zero? # ignore self
-
-        n << @map[y + y_][x + x_] if @map[y + y_] && @map[y + y_][x + x_] == 1
-      end
+    OFFSETS.count do |offset_y, offset_x|
+      @map[y + offset_y][x + offset_x] == 1 if @map[y + offset_y] && @map[y + offset_y][x + offset_x]
     end
-
-    n
   end
 
   def day1!
@@ -58,7 +56,7 @@ class World
       0.upto(@width - 1) do |x|
         cell = @map[y][x]
 
-        neighbours = neighbours_at(x, y).length
+        neighbours = neighbours_at(x, y)
 
         if cell == 1 && (neighbours < 2 || neighbours > 3)
           new_map[y][x] = 0 # die
