@@ -20,7 +20,10 @@ def tick(args)
   end
 
   args.outputs.labels << {
-    text: "Ticks: #{args.state.tick_count} | FPS: #{args.gtk.current_framerate.round} | CELLS: #{cells.size} of #{args.state.world.stats[:born]} (#{args.state.world.stats[:max]})",
+    text: %(Ticks: #{args.state.tick_count} |
+      FPS: #{args.gtk.current_framerate.round} |
+      CELLS: #{cells.size} of #{args.state.world.stats[:born]}
+      (#{args.state.world.stats[:max]})),
     x: 10.from_right,
     y: 10.from_top,
     alignment_enum: 2,
@@ -31,6 +34,9 @@ def tick(args)
 end
 
 def init(args)
-  args.state.world = World.new((1280 - PADDING * 2).div(SIZE), (720 - PADDING * 2).div(SIZE))
+  world_w = (args.grid.w - PADDING * 2).div(SIZE)
+  world_h = (args.grid.h - PADDING * 2).div(SIZE)
+
+  args.state.world = World.new(world_w, world_h)
   args.state.world.day1!
 end
