@@ -2,13 +2,11 @@
 
 require 'app/world'
 
-SIZE    = 3
+SIZE    = 6
 PADDING = SIZE * 2
 
 BLACK = { r: 0, g: 0, b: 0 }.freeze
-WHITE = { r: 255, g: 255, b: 255, a: 150 }.freeze
-RED   = { r: 255, g: 20, b: 20 }.freeze
-GREEN = { r: 20, g: 255, b: 20 }.freeze
+WHITE = { r: 255, g: 255, b: 255 }.freeze
 
 def tick(args)
   init(args) if args.state.tick_count.zero?
