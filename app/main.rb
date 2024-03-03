@@ -5,13 +5,13 @@ require 'app/world'
 SIZE    = 6
 PADDING = SIZE * 2
 
-BLACK = { r: 0, g: 0, b: 0 }.freeze
+BLACK = { r: 0, g: 0, b: 0, a: 0 }.freeze
 WHITE = { r: 255, g: 255, b: 255 }.freeze
 
 def tick(args)
   init(args) if args.state.tick_count.zero?
 
-  args.outputs.background_color = [0, 0, 0]
+  args.outputs.background_color = BLACK
 
   cells = args.state.world.cells
 
@@ -28,6 +28,10 @@ def tick(args)
   }.merge(WHITE)
 
   args.state.world.next_generation! # if args.state.tick_count.mod_zero?(20)
+end
+
+def bg(args, color: BLACK)
+  args.outputs.solids << { x: args.grid.left, y: args.grid.bottom, w: args.grid.w, h: args.grid.h, **color }
 end
 
 def init(args)
