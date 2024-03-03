@@ -30,10 +30,6 @@ def tick(args)
   args.state.world.next_generation! # if args.state.tick_count.mod_zero?(20)
 end
 
-def bg(args, color: BLACK)
-  args.outputs.solids << { x: args.grid.left, y: args.grid.bottom, w: args.grid.w, h: args.grid.h, **color }
-end
-
 def init(args)
   args.state.world = World.new((1280 - PADDING * 2).div(SIZE), (720 - PADDING * 2).div(SIZE))
   args.state.world.day1!
