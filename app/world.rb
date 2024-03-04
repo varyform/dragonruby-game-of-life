@@ -37,10 +37,17 @@ class World
   end
 
   def initialize(width, height, count: (width * height).div(3))
-    @count   = count
-    @width   = width
-    @height  = height
-    @map     = empty_map
+    @count       = count
+    @width       = width
+    @height      = height
+    @map         = empty_map
+    @populations = []
+  end
+
+  def stuck?
+    return if @populations.size < 5
+
+    @populations.all? { |count| count == @populations[0] }
   end
 
   def stats
@@ -60,6 +67,8 @@ class World
   end
 
   def next_generation!
+    return if stuck?
+
     new_map = empty_map
 
     1.upto(@height - 2) do |y|
@@ -71,5 +80,8 @@ class World
     end
 
     @map = new_map
+
+    @populations << cells.size
+    @populations.shift if @populations.size > 5
   end
 end
