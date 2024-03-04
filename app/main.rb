@@ -19,11 +19,15 @@ def tick(args)
     { x: x * SIZE + PADDING, y: y * SIZE + PADDING, w: SIZE - 1, h: SIZE - 1, **WHITE }
   end
 
+  txt = <<~STR
+    Ticks: #{args.state.tick_count} |
+    FPS: #{args.gtk.current_framerate.round} |
+    CELLS: #{cells.size} of #{args.state.world.stats[:born]}
+    (#{args.state.world.stats[:max]})
+  STR
+
   args.outputs.labels << {
-    text: %(Ticks: #{args.state.tick_count} |
-      FPS: #{args.gtk.current_framerate.round} |
-      CELLS: #{cells.size} of #{args.state.world.stats[:born]}
-      (#{args.state.world.stats[:max]})),
+    text: txt,
     x: 10.from_right,
     y: 10.from_top,
     alignment_enum: 2,
